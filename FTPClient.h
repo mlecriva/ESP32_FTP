@@ -4,12 +4,20 @@
 #include <WiFiClient.h>
 #include "FTPCommands.h"
 
+/**
+ * @brief File Transfet type
+ *
+ */
 typedef enum
 {
     TYPE_A = 0X00,
     TYPE_I = 0X01
 } TransfertType_t;
 
+/**
+ * @brief FTPClient class
+ *
+ */
 class FTPClient
 {
 public:

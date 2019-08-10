@@ -3,7 +3,10 @@
 
 #define MAX_COMMAND_NUM 75
 
-/* please refer to https://en.wikipedia.org/wiki/List_of_FTP_commands */
+/**
+ * @brief Commands enumeration
+ * please refer to https://en.wikipedia.org/wiki/List_of_FTP_commands
+ */
 typedef enum
 {
     ABOR = 0X00,

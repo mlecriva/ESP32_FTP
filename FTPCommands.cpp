@@ -3,6 +3,10 @@
 
 using namespace std;
 
+/**
+ * @brief String command list
+ *
+ */
 string FTPCommandList[MAX_COMMAND_NUM] = {
     [ABOR] = "ABOR",
     [ACCT] = "ACCT",
