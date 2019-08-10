@@ -6,13 +6,25 @@ using namespace std;
 
 extern string FTPCommandList[MAX_COMMAND_NUM];
 
+/**
+ * @brief Construct a new FTPClient::FTPClient object
+ *
+ * @param serverAdress
+ * @param username
+ * @param password
+ */
 FTPClient::FTPClient(char *serverAdress, char *username, char *password)
 {
     _username = username;
     _password = password;
     _serverAdress = serverAdress;
 }
-
+/**
+ * @brief Send an ftp command to server
+ *
+ * @param command
+ * @param parameter
+ */
 void FTPClient::writeCommand(FTPCommands_t command, char *parameter)
 {
     if (parameter == NULL)
@@ -32,7 +44,12 @@ void FTPClient::writeCommand(FTPCommands_t command, char *parameter)
         _client.println(F(cmd.c_str()));
     }
 }
-
+/**
+ * @brief Get the server answer
+ *
+ * @param result
+ * @param offsetStart
+ */
 void FTPClient::getServerAnswer(char *result, int offsetStart)
 {
     byte respCode;
@@ -62,7 +79,11 @@ void FTPClient::getServerAnswer(char *result, int offsetStart)
         cout << "Result: " << result << "Result end" << endl;
     }
 }
-
+/**
+ * @brief Init file on server
+ *
+ * @param file type
+ */
 void FTPClient::initFile(TransfertType_t type)
 {
     int array_pasv[6];
@@ -101,7 +122,10 @@ void FTPClient::initFile(TransfertType_t type)
         cout << F("Data connection etablished") << endl;
     }
 }
-
+/**
+ * @brief Connect to the server
+ *
+ */
 void FTPClient::connect()
 {
     cout << "Connecting to " << _serverAdress << endl;
@@ -120,28 +144,46 @@ void FTPClient::connect()
     writeCommand(SYST);
     getServerAnswer();
 }
-
+/**
+ * @brief Stop connection
+ *
+ */
 void FTPClient::stop()
 {
     _client.println(F("QUIT"));
     _client.stop();
     cout << F("Connection closed") << endl;
 }
-
+/**
+ * @brief Create file on server
+ *
+ * @param filename
+ * @param type
+ */
 void FTPClient::createFile(char *filename, TransfertType_t type)
 {
     initFile(type);
     writeCommand(STOR, filename);
     getServerAnswer();
 }
-
+/**
+ * @brief Append data to an existing file
+ *
+ * @param filename
+ * @param type
+ */
 void FTPClient::appendFile(char *filename, TransfertType_t type)
 {
     initFile(type);
     writeCommand(APPE, filename);
     getServerAnswer();
 }
-
+/**
+ * @brief Rename an existing file
+ *
+ * @param from
+ * @param to
+ */
 void FTPClient::RenameFile(char *from, char *to)
 {
     writeCommand(RNFR, from);
@@ -150,12 +192,19 @@ void FTPClient::RenameFile(char *from, char *to)
     writeCommand(RNTO, to);
     getServerAnswer();
 }
-
+/**
+ * @brief Write on a file
+ *
+ * @param str
+ */
 void FTPClient::write(char *str)
 {
     _dataClient.print(str);
 }
-
+/**
+ * @brief Close file
+ *
+ */
 void FTPClient::closeFile()
 {
     cout << F("Close File") << endl;
