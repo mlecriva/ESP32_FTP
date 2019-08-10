@@ -4,6 +4,8 @@
 
 using namespace std;
 
+extern string FTPCommandList[MAX_COMMAND_NUM];
+
 FTPClient::FTPClient(char *serverAdress, char *username, char *password)
 {
     _username = username;
@@ -15,8 +17,8 @@ void FTPClient::writeCommand(FTPCommands_t command, char *parameter)
 {
     if (parameter == NULL)
     {
-        cout << "Send" << FTPCommandList[command] << endl;
-        _client.println(F(FTPCommandList[command]));
+        cout << "Send : " << FTPCommandList[command] << endl;
+        _client.println(F(FTPCommandList[command].c_str()));
     }
     else
     {
@@ -25,7 +27,7 @@ void FTPClient::writeCommand(FTPCommands_t command, char *parameter)
         cmd.append(" ");
         cmd.append(parameter);
 
-        cout << "Send" << cmd << endl;
+        cout << "Send : " << cmd << endl;
 
         _client.println(F(cmd.c_str()));
     }
