@@ -4,6 +4,8 @@
 #include <WiFiClient.h>
 #include "FTPCommands.h"
 
+#define OUTPUT_BUFFER_SIZE 128
+
 /**
  * @brief File Transfet type
  *
@@ -21,7 +23,7 @@ typedef enum
 class FTPClient
 {
 public:
-    FTPClient(char *serverAdress, char *username, char *password);
+    FTPClient(char *serverAdress, char *username, char *password, int port = 21);
 
     void connect();
     void stop();
@@ -43,10 +45,12 @@ private:
     char *_password;
     char *_serverAdress;
 
+    int _port;
+
     WiFiClient _client;
     WiFiClient _dataClient;
 
-    char _outBuffer[128];
+    char _outBuffer[OUTPUT_BUFFER_SIZE];
     char _outCounter;
 };
 

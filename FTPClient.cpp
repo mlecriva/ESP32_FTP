@@ -13,11 +13,12 @@ extern string FTPCommandList[MAX_COMMAND_NUM];
  * @param username
  * @param password
  */
-FTPClient::FTPClient(char *serverAdress, char *username, char *password)
+FTPClient::FTPClient(char *serverAdress, char *username, char *password, int port)
 {
     _username = username;
     _password = password;
     _serverAdress = serverAdress;
+    _port = port;
 }
 /**
  * @brief Send an ftp command to server
@@ -62,7 +63,7 @@ void FTPClient::getServerAnswer(char *result, int offsetStart)
     while (_client.available())
     {
         thisByte = _client.read();
-        if (_outCounter < 127)
+        if (_outCounter < (OUTPUT_BUFFER_SIZE - 1))
         {
             _outBuffer[_outCounter++] = thisByte;
             _outCounter++;
@@ -129,7 +130,7 @@ void FTPClient::initFile(TransfertType_t type)
 void FTPClient::connect()
 {
     cout << "Connecting to " << _serverAdress << endl;
-    if (_client.connect(_serverAdress, 21))
+    if (_client.connect(_serverAdress, _port))
     {
         cout << F("Command connected") << endl;
     }
