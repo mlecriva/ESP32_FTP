@@ -1,6 +1,7 @@
 #include "FTPClient.h"
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
@@ -19,6 +20,7 @@ FTPClient::FTPClient(char *serverAdress, char *username, char *password, int por
     _password = password;
     _serverAdress = serverAdress;
     _port = port;
+    _outBuffer = new char[OUTPUT_BUFFER_SIZE];
 }
 /**
  * @brief Send an ftp command to server
@@ -66,10 +68,10 @@ void FTPClient::getServerAnswer(char *result, int offsetStart)
         if (_outCounter < (OUTPUT_BUFFER_SIZE - 1))
         {
             _outBuffer[_outCounter++] = thisByte;
-            _outCounter++;
-            _outBuffer[_outCounter] = 0;
         }
     }
+    _outBuffer[_outCounter++] = 0;
+    cout << _outBuffer << endl;
     if (result != NULL)
     {
         cout << "Result start" << endl;
@@ -103,24 +105,35 @@ void FTPClient::initFile(TransfertType_t type)
     writeCommand(PASV);
     getServerAnswer();
 
-    char *tStr = strtok(_outBuffer, "(,");
-
-    for (int i = 0; i < 6; i++)
+    if (_outBuffer == NULL)
     {
-        tStr = strtok(NULL, "(,");
-        array_pasv[i] = atoi(tStr);
-        if (tStr == NULL)
-        {
-            cout << F("Bad PASV Answer") << endl;
-        }
+        cout << "Bad PASV Answer" << endl;
     }
 
+    char *tStr;
+
+    tStr = strtok(_outBuffer, "(");
+    for (int i = 0; i < 6; i++)
+    {
+        tStr = strtok(NULL, ",");
+        array_pasv[i] = atoi(tStr);
+
+        if (tStr == NULL)
+        {
+            cout << "Bad PASV Answer" << endl;
+            break;
+        }
+    }
     port = ((array_pasv[4] << 8) | (array_pasv[5] & 255));
-    cout << F("Data port: ") << port << endl;
+    cout << "Data port: " << port << endl;
 
     if (_dataClient.connect(_serverAdress, port))
     {
-        cout << F("Data connection etablished") << endl;
+        cout << "Data connection etablished" << endl;
+    }
+    else
+    {
+        cout << "Data connection error" << endl;
     }
 }
 /**
@@ -132,7 +145,7 @@ void FTPClient::connect()
     cout << "Connecting to " << _serverAdress << endl;
     if (_client.connect(_serverAdress, _port))
     {
-        cout << F("Command connected") << endl;
+        cout << "Command connected" << endl;
     }
     getServerAnswer();
 
@@ -153,7 +166,7 @@ void FTPClient::stop()
 {
     _client.println(F("QUIT"));
     _client.stop();
-    cout << F("Connection closed") << endl;
+    cout << "Connection closed" << endl;
 }
 /**
  * @brief Create file on server
@@ -208,7 +221,7 @@ void FTPClient::write(char *str)
  */
 void FTPClient::closeFile()
 {
-    cout << F("Close File") << endl;
+    cout << "Close File" << endl;
     _dataClient.stop();
     getServerAnswer();
 }

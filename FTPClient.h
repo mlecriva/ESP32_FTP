@@ -50,7 +50,7 @@ private:
     WiFiClient _client;
     WiFiClient _dataClient;
 
-    char _outBuffer[OUTPUT_BUFFER_SIZE];
+    char *_outBuffer;
     char _outCounter;
 };
 
