@@ -28,15 +28,15 @@ public:
     void connect();
     void stop();
 
-    void createFile(char *filename, TransfertType_t type = TYPE_I);
-    void appendFile(char *filename, TransfertType_t type = TYPE_I);
-    void RenameFile(char *from, char *to);
+    void createFile(const char *filename, TransfertType_t type = TYPE_I);
+    void appendFile(const char *filename, TransfertType_t type = TYPE_I);
+    void RenameFile(const char *from, const char *to);
 
-    void write(char *str);
+    void write(const char *str);
     void closeFile();
 
 private:
-    void writeCommand(FTPCommands_t command, char *parameter = NULL);
+    void writeCommand(FTPCommands_t command, const char *parameter = NULL);
     void getServerAnswer(char *result = NULL, int offsetStart = 0);
     void initFile(TransfertType_t type);
 

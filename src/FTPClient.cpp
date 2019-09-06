@@ -28,7 +28,7 @@ FTPClient::FTPClient(char *serverAdress, char *username, char *password, int por
  * @param command
  * @param parameter
  */
-void FTPClient::writeCommand(FTPCommands_t command, char *parameter)
+void FTPClient::writeCommand(FTPCommands_t command, const char *parameter)
 {
     if (parameter == NULL)
     {
@@ -174,7 +174,7 @@ void FTPClient::stop()
  * @param filename
  * @param type
  */
-void FTPClient::createFile(char *filename, TransfertType_t type)
+void FTPClient::createFile(const char *filename, TransfertType_t type)
 {
     initFile(type);
     writeCommand(STOR, filename);
@@ -186,7 +186,7 @@ void FTPClient::createFile(char *filename, TransfertType_t type)
  * @param filename
  * @param type
  */
-void FTPClient::appendFile(char *filename, TransfertType_t type)
+void FTPClient::appendFile(const char *filename, TransfertType_t type)
 {
     initFile(type);
     writeCommand(APPE, filename);
@@ -198,7 +198,7 @@ void FTPClient::appendFile(char *filename, TransfertType_t type)
  * @param from
  * @param to
  */
-void FTPClient::RenameFile(char *from, char *to)
+void FTPClient::RenameFile(const char *from, const char *to)
 {
     writeCommand(RNFR, from);
     getServerAnswer();
@@ -211,7 +211,7 @@ void FTPClient::RenameFile(char *from, char *to)
  *
  * @param str
  */
-void FTPClient::write(char *str)
+void FTPClient::write(const char *str)
 {
     _dataClient.print(str);
 }
